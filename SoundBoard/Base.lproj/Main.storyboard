@@ -92,6 +92,13 @@
                                     <action selector="agregarTappeed:" destination="X05-ZY-kre" eventType="touchUpInside" id="AXJ-Se-b6P"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0:0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOE-gQ-1Zw">
+                                <rect key="frame" x="281" y="119" width="51" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -118,6 +125,7 @@
                         <outlet property="grabarButton" destination="sUd-aM-2OU" id="76r-uk-ieX"/>
                         <outlet property="nombreTextField" destination="Kdq-An-iXh" id="SMU-Vj-zoQ"/>
                         <outlet property="reproducirButton" destination="9nr-Ye-ckc" id="rkr-6S-4gb"/>
+                        <outlet property="tiempoLabel" destination="iOE-gQ-1Zw" id="FKg-N7-JHC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ukD-ne-xXX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

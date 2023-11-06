@@ -15,6 +15,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var grabaciones:[Grabacion] = []
     var reproducirAudio:AVAudioPlayer?
+    var volumen: Float = 1.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,10 +32,29 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = UITableViewCell()
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "MiCeldaConDetalle")
         let grabacion = grabaciones[indexPath.row]
         cell.textLabel?.text = grabacion.nombre
+        cell.detailTextLabel?.text = formatearTiempo(grabacion.duracion)
+        
+        let slider = UISlider(frame: CGRect(x: 10, y: 10, width: 200, height: 30))
+        slider.value = grabacion.volumen
+        slider.tag = indexPath.row
+        slider.addTarget(self, action: #selector(ajustarVolumen(_:)), for: .valueChanged);
+        cell.accessoryView = slider
         return cell
+    }
+    
+    @objc func ajustarVolumen(_ sender: UISlider) {
+        let grabacion = grabaciones[sender.tag]
+        grabacion.volumen = sender.value
+    }
+
+    
+    func formatearTiempo(_ tiempo: TimeInterval) ->String {
+        let minutos = Int(tiempo) / 60
+        let segundos = Int(tiempo) % 60
+        return String(format: "%2d:%02d", minutos, segundos)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,6 +71,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let grabacion = grabaciones[indexPath.row]
         do{
             reproducirAudio = try AVAudioPlayer(data: grabacion.audio! as Data)
+            reproducirAudio?.volume = grabacion.volumen
             reproducirAudio?.play()
         }catch{}
         tablaGrabaciones.deselectRow(at: indexPath, animated: true)

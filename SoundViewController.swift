@@ -14,10 +14,15 @@ class SoundViewController: UIViewController {
     @IBOutlet weak var reproducirButton: UIButton!
     @IBOutlet weak var nombreTextField: UITextField!
     @IBOutlet weak var agregarButton: UIButton!
+    @IBOutlet weak var tiempoLabel: UILabel!
     
     var grabarAudio:AVAudioRecorder?
     var reproducirAudio:AVAudioPlayer?
     var audioURL:URL?
+    
+    var grabacionTimer:Timer?
+    var tiempoTranscurrido: TimeInterval = 0.0
+    var duracion:TimeInterval = 0.0
 
     @IBAction func grabarTapped(_ sender: Any) {
         if grabarAudio!.isRecording{
@@ -25,11 +30,29 @@ class SoundViewController: UIViewController {
             grabarButton.setTitle("GRABAR", for: .normal)
             reproducirButton.isEnabled = true
             agregarButton.isEnabled = true
+            
+            grabacionTimer?.invalidate()
+            grabacionTimer = nil
         }else{
             grabarAudio?.record()
             grabarButton.setTitle("DETENER", for: .normal)
             reproducirButton.isEnabled = false
+            
+            tiempoTranscurrido = 0.0
+            grabacionTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(actualizarTiempoTranscurrido), userInfo: nil, repeats: true)
         }
+    }
+    
+    @objc func actualizarTiempoTranscurrido(){
+        tiempoTranscurrido += 1.0
+        tiempoLabel.text = formatearTiempo(tiempoTranscurrido)
+        
+    }
+    
+    func formatearTiempo(_ tiempo: TimeInterval) ->String {
+        let minutos = Int(tiempo) / 60
+        let segundos = Int(tiempo) % 60
+        return String(format: "%2d:%02d", minutos, segundos)
     }
     
     @IBAction func reproducirTapped(_ sender: Any) {
@@ -45,6 +68,7 @@ class SoundViewController: UIViewController {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let grabacion = Grabacion(context: context)
         grabacion.nombre = nombreTextField.text
+        grabacion.duracion = tiempoTranscurrido
         grabacion.audio = NSData(contentsOf: audioURL!)! as Data
         (UIApplication.shared.delegate as!  AppDelegate).saveContext()
         navigationController!.popViewController(animated: true)
